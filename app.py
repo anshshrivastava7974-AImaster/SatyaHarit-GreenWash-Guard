@@ -4,28 +4,12 @@ from urllib.parse import urlparse
 from datetime import datetime
 from pathlib import Path
 
-# =========================================================
-# SATYAHARIT — GREENWASH GUARD
-# FINAL HACKATHON PROTOTYPE
-# =========================================================
-# IMPORTANT:
-# 1. The scoring engine is deterministic and language-independent.
-# 2. Changing English/Hindi/Hinglish NEVER changes the score.
-# 3. The prototype analyzes product text and URL structure.
-# 4. Packaging images are displayed, but OCR/live certificate
-#    verification is NOT claimed in this offline prototype.
-# =========================================================
-
 st.set_page_config(
     page_title="SatyaHarit — GreenWash Guard",
     page_icon="🌱",
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
-# =========================================================
-# DARK UI
-# =========================================================
 
 st.markdown(
     """
@@ -366,9 +350,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# =========================================================
-# MULTILINGUAL TEXT
-# =========================================================
 
 TEXT = {
     "English": {
@@ -643,9 +624,6 @@ TEXT = {
     },
 }
 
-# =========================================================
-# CLAIM DATABASE — LOCKED SCORING LOGIC
-# =========================================================
 
 CLAIM_DATABASE = {
     "organic": {
@@ -746,10 +724,6 @@ Limited Time Offer
 Buy Now!
 https://eco-certificate-verify.example.com/certificate""",
 }
-
-# =========================================================
-# HELPERS — ANALYSIS NEVER DEPENDS ON LANGUAGE
-# =========================================================
 
 def normalize_text(text: str) -> str:
     text = (text or "").lower().replace("\n", " ")
@@ -987,17 +961,8 @@ def claim_status(claim, T):
         return T["claim_status_specific"], "warning-card", T["specific_claim"]
     return T["claim_status_general"], "warning-card", T["general_claim"]
 
-
-# =========================================================
-# SESSION STATE
-# =========================================================
-
 if "result" not in st.session_state:
     st.session_state.result = None
-
-# =========================================================
-# LANGUAGE
-# =========================================================
 
 language = st.selectbox(
     "🌐 Language / भाषा",
@@ -1007,16 +972,9 @@ language = st.selectbox(
 
 T = TEXT[language]
 
-# =========================================================
-# LOGO
-# =========================================================
 
 BASE_DIR = Path(__file__).resolve().parent
 LOGO_PATH = BASE_DIR / "satyaharit_logo.png"
-
-# =========================================================
-# HEADER
-# =========================================================
 
 header_left, header_right = st.columns([1, 6], vertical_alignment="center")
 
@@ -1042,9 +1000,6 @@ with header_right:
         unsafe_allow_html=True,
     )
 
-# =========================================================
-# SIDEBAR
-# =========================================================
 
 with st.sidebar:
     st.markdown("## 🌱 SatyaHarit")
@@ -1057,18 +1012,10 @@ with st.sidebar:
     st.divider()
     st.caption(T["prototype"])
 
-# =========================================================
-# INPUT
-# =========================================================
-
 st.markdown(
     f'<div class="section-title">{T["product_info"]}</div>',
     unsafe_allow_html=True
 )
-
-# =========================
-# INPUT SECTION
-# =========================
 
 col1, col2 = st.columns([1.25, 1])
 
@@ -1127,11 +1074,6 @@ with col2:
 
         st.caption(T["image_help"])
 
-
-# =========================
-# UPLOAD BUTTON / BOX STYLE
-# =========================
-
 st.markdown("""
 <style>
 
@@ -1174,10 +1116,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# =========================================================
-# QUICK DEMO
-# =========================================================
-
 st.markdown(f'<div class="section-title">{T["quick_demo"]}</div>', unsafe_allow_html=True)
 
 sample_options = [
@@ -1205,9 +1143,6 @@ if sample_label in sample_map:
     product_text = sample_map[sample_label]
     st.info(f"{T['sample_using']}: {sample_label}")
 
-# =========================================================
-# ANALYZE
-# =========================================================
 
 if st.button(T["analyze"], type="primary", use_container_width=True):
     # IMPORTANT: only user/sample input enters the analysis.
@@ -1263,9 +1198,6 @@ if st.button(T["analyze"], type="primary", use_container_width=True):
             "time": datetime.now().strftime("%d %b %Y, %I:%M %p"),
         }
 
-# =========================================================
-# RESULT
-# =========================================================
 
 if st.session_state.result:
     result = st.session_state.result
@@ -1280,7 +1212,6 @@ if st.session_state.result:
     st.divider()
     st.markdown(f'<div class="section-title">{T["report"]}</div>', unsafe_allow_html=True)
 
-    # ---------------- SCORE + METRICS ----------------
     c1, c2, c3 = st.columns(3)
 
     with c1:
@@ -1317,7 +1248,6 @@ if st.session_state.result:
             unsafe_allow_html=True,
         )
 
-    # ---------------- RECOMMENDATION ----------------
     st.markdown(f'<div class="section-title">{T["recommendation"]}</div>', unsafe_allow_html=True)
 
     rec_class = {
@@ -1338,7 +1268,7 @@ if st.session_state.result:
         unsafe_allow_html=True,
     )
 
-    # ---------------- THREE-WAY ANALYSIS ----------------
+
     st.divider()
     good_col, doubtful_col, risk_col = st.columns(3)
 
@@ -1445,7 +1375,6 @@ if st.session_state.result:
         ):
             st.info(T["no_risk"])
 
-    # ---------------- CUSTOMER ACTION ----------------
     st.divider()
     st.markdown(f'<div class="section-title">{T["action"]}</div>', unsafe_allow_html=True)
 
@@ -1464,7 +1393,6 @@ if st.session_state.result:
         unsafe_allow_html=True,
     )
 
-    # ---------------- CLAIM SUMMARY ----------------
     st.markdown(f"### 🏷️ {T['claims_detected']}")
 
     if result["claims"]:
@@ -1483,7 +1411,6 @@ if st.session_state.result:
     else:
         st.info(T["no_claims"])
 
-    # ---------------- URL ANALYSIS ----------------
     st.markdown(f"### {T['url_analysis']}")
 
     if result["url_results"]:
@@ -1514,20 +1441,17 @@ if st.session_state.result:
     else:
         st.info(T["no_url"])
 
-    # ---------------- SCORE EXPLANATION ----------------
     st.markdown(f"### {T['why']}")
 
     unique_codes = list(dict.fromkeys(result["reason_codes"]))
     for code in unique_codes:
         st.write("🔎", reason_text(code, T))
 
-    # ---------------- MARKETING RED FLAGS ----------------
     if result["urgency"]:
         st.markdown(f"### {T['risk_redflags']}")
         for phrase in result["urgency"]:
             st.write("•", phrase)
 
-    # ---------------- BUYING CHECKLIST ----------------
     st.markdown(f"### {T['checklist']}")
     st.write("✅", T["check1"])
     st.write("✅", T["check2"])
@@ -1536,9 +1460,6 @@ if st.session_state.result:
     st.warning(T["disclaimer"])
     st.caption(f"Analysis generated: {result['time']}")
 
-# =========================================================
-# WORKFLOW
-# =========================================================
 
 st.divider()
 st.markdown(f'<div class="section-title">{T["how"]}</div>', unsafe_allow_html=True)
@@ -1564,9 +1485,6 @@ for i, (num, label, icon) in enumerate(steps):
             unsafe_allow_html=True,
         )
 
-# =========================================================
-# FOOTER
-# =========================================================
 
 st.markdown(
     f"""
